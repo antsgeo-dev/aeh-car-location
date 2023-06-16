@@ -1,40 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-} from "react-router-dom";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <App />
-    ),
-  },
-  {
-    path: "login",
-    element: <div>Login</div>,
-  },
-]);
+import { Router, RouterProvider } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
+import { router } from "./routing";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Auth0Provider
+      domain={process.env.REACT_APP_DOMAIN as string}
+      clientId={process.env.REACT_APP_CLIENT_ID as string}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+      }}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
+    >
+      <RouterProvider router={router} />
+    </Auth0Provider>
   </React.StrictMode>
-  
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
